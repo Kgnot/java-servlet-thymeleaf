@@ -1,13 +1,13 @@
 package org.server.controller;
 
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.server.utils.ServletAutoMapping;
 
 import java.io.IOException;
 
-@WebServlet(value = "/api/bye")
+@ServletAutoMapping("/api/bye")
 public class ByeServlet extends HttpServlet {
 
     @Override

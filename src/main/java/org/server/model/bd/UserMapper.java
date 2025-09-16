@@ -1,4 +1,4 @@
-package org.server.bd;
+package org.server.model.bd;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,6 @@
 package org.server;
 
-import org.server.web.AppServer;
-import org.server.web.AppServerService;
+import org.server.model.web.AppServerService;
 
 
 public class Main {

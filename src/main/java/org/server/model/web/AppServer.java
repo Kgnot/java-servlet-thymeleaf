@@ -1,10 +1,9 @@
-package org.server.web;
+package org.server.model.web;
 
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.util.thread.VirtualThreadPool;
 
 import java.util.List;
 import java.util.logging.Logger;

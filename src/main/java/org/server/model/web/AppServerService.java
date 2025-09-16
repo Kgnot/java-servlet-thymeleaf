@@ -1,7 +1,7 @@
-package org.server.web;
+package org.server.model.web;
 
-import org.server.web.connector.ConnectorFactory;
-import org.server.web.handler.HandlerServerFactory;
+import org.server.model.web.connector.ConnectorFactory;
+import org.server.model.web.handler.HandlerServerFactory;
 
 import java.util.List;
 

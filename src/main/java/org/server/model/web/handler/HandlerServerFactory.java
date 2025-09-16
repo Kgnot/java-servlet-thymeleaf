@@ -1,4 +1,4 @@
-package org.server.web.handler;
+package org.server.model.web.handler;
 
 import jakarta.servlet.http.HttpServlet;
 import org.eclipse.jetty.ee10.servlet.DefaultServlet;
@@ -50,8 +50,7 @@ public class HandlerServerFactory {
     }
 
     public Handler.Abstract createResourceHandler() {
-        ResourceHandler resourceHandler = new ResourceHandler();
-        return resourceHandler;
+        return new ResourceHandler();
     }
 
 
