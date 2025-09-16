@@ -14,7 +14,6 @@ java {
 //}
 
 
-
 group = 'org.server'
 version = '1.0-SNAPSHOT'
 
@@ -40,6 +39,8 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.7.7'
     // Thymeleaf:
     implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+    // reflection:
+    implementation 'org.reflections:reflections:0.10.2'
 
 }
 

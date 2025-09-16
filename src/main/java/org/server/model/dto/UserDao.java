@@ -1,13 +1,16 @@
-package org.server.bd;
+package org.server.model.dto;
 
-import java.sql.Connection;
+import org.server.model.bd.DataBasesConnection;
+import org.server.model.mapper.UserMapper;
+import org.server.model.entities.User;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
 
-    private DataBasesConnection db;
+    private final DataBasesConnection db;
 
 
     public UserDao(DataBasesConnection db) {

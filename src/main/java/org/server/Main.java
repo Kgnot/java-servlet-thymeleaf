@@ -1,52 +1,44 @@
 package org.server;
 
-import org.server.bd.DataBasesConnection;
-import org.server.bd.User;
-import org.server.bd.UserDao;
-import org.server.bd.UserService;
-import org.server.web.AppServer;
+import org.server.config.AppConfig;
+import org.server.model.web.AppServerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
+        // Properties:
+        readProperties();
+
+
+        AppConfig.start(); // iniciamos la lectura
 
         // iniciamos el server:
-        AppServer appServer = new AppServer();
+        AppServerService appServer = new AppServerService();
         try {
             appServer.start();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
+    }
 
-//        try {
-//            DataBasesConnection dbc = new DataBasesConnection();
-//            UserDao userDao = new UserDao(dbc);
-//
-//            // --- PRIMERA FORMA: directa ---
-//            long start1 = System.nanoTime();
-//            var result = userDao.getUsers();
-//            long end1 = System.nanoTime();
-//            System.out.println("Directo: " + result);
-//            System.out.println("Tiempo directo: " + (end1 - start1) / 1_000_000.0 + " ms");
-//
-//            // --- SEGUNDA FORMA: con UserService (futuro) ---
-//            UserService userService = new UserService();
-//
-//            long start2 = System.nanoTime();
-//            CompletableFuture<List<User>> result2 = userService.getUsers();
-//            List<User> users = result2.get(); // bloquea hasta que termina
-//            long end2 = System.nanoTime();
-//
-//            System.out.println("Con Future: " + users);
-//            System.out.println("Tiempo con Future: " + (end2 - start2) / 1_000_000.0 + " ms");
-//
-//        } catch (SQLException | ExecutionException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+    private static void readProperties() {
+        Properties properties = new Properties();
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
+            properties.load(input);
+            for (String name : properties.stringPropertyNames()) {
+                System.setProperty(name, properties.getProperty(name));
+            }
+        } catch (IOException e) {
+            log.error("Error al abrir config.properties", e);
+        }
     }
 }
