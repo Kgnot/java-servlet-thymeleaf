@@ -1,31 +1,59 @@
 package org.server.controller;
 
+import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.server.config.ThymeleafConfig;
-import org.server.utils.ServletAutoMapping;
-import org.server.view.HomeView;
+import org.server.config.shared.Controller;
+import org.server.config.shared.Inject;
+import org.server.model.service.UserService;
+import org.server.config.shared.ServletAutoMapping;
+import org.server.view.render.HomeViewRender;
 
-import java.io.IOException;
+import java.util.HashMap;
 
 
+@Controller
 @ServletAutoMapping("/api/home")
 public class HelloServlet extends HttpServlet {
 
-    private final HomeView homeView = new HomeView();
+    @Inject
+    private HomeViewRender homeViewRender;
+    @Inject
+    private UserService userService;
+
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
         resp.setContentType("text/html;charset=UTF-8");
-        try {
-            var templateEngine = ThymeleafConfig.getTemplateEngine();
-            var webExchange = ThymeleafConfig.buildWebExchange(req, resp);
-            homeView.process(webExchange, templateEngine, resp.getWriter());
+        AsyncContext asyncContext = req.startAsync();
+        userService.getUsers()
+                .whenComplete((userList, throwable) -> {
+                    try {
+                        var modelMap = new HashMap<String, Object>();
+                        modelMap.put("userList", userList);
 
-        } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error procesando template: " + e.getMessage());
-        }
+                        var templateEngine = ThymeleafConfig.getTemplateEngine();
+                        var webExchange = ThymeleafConfig.buildWebExchange(
+                                (HttpServletRequest) asyncContext.getRequest(),
+                                (HttpServletResponse) asyncContext.getResponse()
+                        );
+
+                        homeViewRender.process(
+                                webExchange,
+                                templateEngine,
+                                asyncContext.getResponse().getWriter(),
+                                modelMap
+                        );
+
+                    } catch (Exception e) {
+                        log("Error en GetUsers " + e.getMessage());
+                    } finally {
+                        asyncContext.complete();
+                    }
+                });
     }
+
 }
 

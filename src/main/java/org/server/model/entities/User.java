@@ -1,4 +1,4 @@
-package org.server.model.bd;
+package org.server.model.entities;
 
 public record User(
         Integer id,

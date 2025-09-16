@@ -1,4 +1,6 @@
-package org.server.model.bd;
+package org.server.model.mapper;
+
+import org.server.model.entities.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

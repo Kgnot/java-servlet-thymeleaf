@@ -1,4 +1,8 @@
-package org.server.model.bd;
+package org.server.model.dto;
+
+import org.server.model.bd.DataBasesConnection;
+import org.server.model.mapper.UserMapper;
+import org.server.model.entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

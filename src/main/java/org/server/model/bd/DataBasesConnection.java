@@ -1,14 +1,18 @@
 package org.server.model.bd;
 
+import org.server.config.shared.Component;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Component
 public class DataBasesConnection {
 
-    private final String url = "jdbc:postgresql://localhost:5432/fec";
-    private final String username = "kgnot";
-    private final String password = "1234";
+    private final String url = System.getProperty("DB.URL");
+    private final String username = System.getProperty("DB.USERNAME");
+    private final String password = System.getProperty("DB.PASSWORD");
     private final Connection connection;
 
 
@@ -24,7 +28,7 @@ public class DataBasesConnection {
     public List<Object[]> getQuery(String query) throws SQLException {
         List<Object[]> results = new ArrayList<>();
         Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
+        ResultSet rs = stmt.executeQuery(query); // TODO Manage this problem
 
         while (rs.next()) {
             Integer id = rs.getInt("user_id");
