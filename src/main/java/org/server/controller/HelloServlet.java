@@ -1,18 +1,16 @@
 package org.server.controller;
 
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.server.config.ThymeleafConfig;
+import org.server.utils.ServletAutoMapping;
 import org.server.view.HomeView;
-import org.thymeleaf.context.WebContext;
 
-import javax.script.CompiledScript;
 import java.io.IOException;
 
 
-@WebServlet(value = "/api/home")
+@ServletAutoMapping("/api/home")
 public class HelloServlet extends HttpServlet {
 
     private final HomeView homeView = new HomeView();

@@ -1,75 +1,57 @@
 package org.server.web;
 
-import jakarta.servlet.http.HttpServlet;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.thread.VirtualThreadPool;
-import org.server.controller.ByeServlet;
-import org.server.controller.HelloServlet;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AppServer {
 
     private static final Logger log;
-    private final AppServletConfigHandler configHandler;
+    private final Server server;
+    private Connector connector;
+    private List<Handler.Abstract> handler;
+
+
+    private ServletContextHandler context;
 
     static {
         log = Logger.getLogger(AppServer.class.getName());
         log.info("Starting ServerWeb ...");
     }
 
-    private final Server server;
 
     public AppServer() {
-        this(8080);
+        server = new Server();
     }
 
-    public AppServer(int port) {
-        configHandler = AppServletConfigHandler.getInstance();
-        server = createServer(port);
+    public void setConnector(Connector connector) {
+        this.connector = connector;
     }
 
+    public void setHandler(List<Handler.Abstract> handler) {
+        this.handler = handler;
+    }
 
-    // private class
-    private Server createServer(int port) {
-        var server = new Server(new VirtualThreadPool());
-        server.setStopAtShutdown(true);
-        server.addConnector(createConnector(port, server));
-        try {
-            assert configHandler != null;
-            server.setHandler(configHandler.getContextHandler());
-        } catch (Exception e) {
-            log.info("Error creating server " + e);
-        }
+    public Server getServer() {
         return server;
     }
 
-    //
-    private HelloServlet createHelloServlet() {
-        return new HelloServlet();
-    }
+//
 
-    private ByeServlet createByeServlet() {
-        return new ByeServlet();
+    public void createServer() {
+        server.setStopAtShutdown(true);
+        server.addConnector(connector);
+        try {
+            for (Handler.Abstract handler : handler) {
+                server.setHandler(handler);
+            }
+        } catch (Exception e) {
+            log.info("Error creating server " + e);
+        }
     }
-
-    //
-    private ServerConnector createConnector(int port, Server server) {
-        var connector = new ServerConnector(server);
-        connector.setPort(port);
-        connector.setName("main");
-        return connector;
-    }
-
-    public void start() throws Exception {
-        server.start();
-    }
-
-    public void stop() throws Exception {
-        server.stop();
-    }
-
 }
