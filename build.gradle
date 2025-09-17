@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-//    id 'groovy'
     id 'application'
 }
 java {
@@ -9,11 +8,6 @@ java {
     }
 }
 
-//application{
-//    mainClass = 'JettyRunner'
-//}
-
-
 group = 'org.server'
 version = '1.0-SNAPSHOT'
 
@@ -21,26 +15,22 @@ repositories {
     mavenCentral()
 }
 
-//sourceSets {
-//    main {
-//        groovy {
-//            srcDirs = ['src/main/groovy']
-//        }
-//    }
-//}
-
 
 dependencies {
 //    implementation 'org.codehaus.groovy:groovy-all:3.0.18'
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.slf4j:slf4j-simple:2.0.9'
-    implementation 'org.eclipse.jetty.ee10:jetty-ee10-servlet:12.0.16'
+    implementation 'org.eclipse.jetty.ee11:jetty-ee11-servlet:12.1.1'
     //postgresql
     implementation 'org.postgresql:postgresql:42.7.7'
     // Thymeleaf:
     implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
     // reflection:
     implementation 'org.reflections:reflections:0.10.2'
+    // Websocket:
+    implementation 'jakarta.websocket:jakarta.websocket-api:2.2.0'
+    implementation 'org.eclipse.jetty.ee11.websocket:jetty-ee11-websocket-jakarta-server:12.1.1'
+
 
 }
 

@@ -1,28 +1,27 @@
 package org.server.model.web;
 
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.server.config.AppConfig;
+import org.server.config.shared.Websocket;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 public class AppServer {
-
     private static final Logger log;
+
     private final Server server;
     private Connector connector;
     private List<Handler.Abstract> handler;
-
-
-    private ServletContextHandler context;
 
     static {
         log = Logger.getLogger(AppServer.class.getName());
         log.info("Starting ServerWeb ...");
     }
-
 
     public AppServer() {
         server = new Server();
@@ -48,9 +47,18 @@ public class AppServer {
         try {
             for (Handler.Abstract handler : handler) {
                 server.setHandler(handler);
+                if (handler instanceof ServletContextHandler) {
+                    JakartaWebSocketServletContainerInitializer.configure((ServletContextHandler) handler, (servletContext, wsContainer) -> {
+                        var websockets = AppConfig.getTypeClassBean(Websocket.class); // obtenemos todos los Websocket.class
+                        for (var websocket : websockets) {
+                            wsContainer.addEndpoint(websocket);
+                        }
+                    });
+                }
             }
         } catch (Exception e) {
             log.info("Error creating server " + e);
         }
     }
+
 }

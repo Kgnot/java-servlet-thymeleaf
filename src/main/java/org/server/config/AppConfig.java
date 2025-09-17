@@ -6,12 +6,10 @@ import org.server.config.shared.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class AppConfig {
 
@@ -28,6 +26,8 @@ public class AppConfig {
         createInstance(Controller.class);
         //Create view render instance
         createInstance(ViewRender.class);
+        //create websocket's instance
+        createInstance(Websocket.class);
         // Inject dependencies
         for (Object bean : beans.values()) {
             injectDependencies(bean);
@@ -38,11 +38,6 @@ public class AppConfig {
                 logger.log(Level.INFO, "Bean: " + bean);
             }
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<T> clazz) {
-        return (T) beans.get(clazz);
     }
 
     private static void createInstance(Class<? extends Annotation> annotationClass) {
@@ -65,6 +60,17 @@ public class AppConfig {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getBean(Class<T> clazz) {
+        return (T) beans.get(clazz);
+    }
+
+    public static List<Class<?>> getTypeClassBean(Class<? extends Annotation> annotation) {
+        return beans.keySet()
+                .stream()
+                .filter(clazz -> clazz.isAnnotationPresent(annotation))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     public static void injectDependencies(Object bean) {
         for (Field field : bean.getClass().getDeclaredFields()) {
