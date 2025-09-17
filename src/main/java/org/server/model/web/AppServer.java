@@ -39,8 +39,6 @@ public class AppServer {
         return server;
     }
 
-//
-
     public void createServer() {
         server.setStopAtShutdown(true);
         server.addConnector(connector);

@@ -16,15 +16,11 @@ public class Main {
     public static void main(String[] args) {
         // Properties:
         readProperties();
-
-
         AppConfig.start(); // iniciamos la lectura
-
         // iniciamos el server:
         AppServerService appServer = new AppServerService();
         try {
             appServer.start();
-
         } catch (Exception e) {
             log.error(e.getMessage());
         }

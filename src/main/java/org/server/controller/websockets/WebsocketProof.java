@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 @Websocket
 @ServerEndpoint("/web") // Esto me da el endpoint "ws://localhost:8080/web"
-public class WebsocketProof /*extends Endpoint*/ {
+public class WebsocketProof {
     private static final Logger LOGGER = Logger.getLogger(WebsocketProof.class.getName());
 
     static {
@@ -17,20 +17,7 @@ public class WebsocketProof /*extends Endpoint*/ {
     }
 
     @OnOpen
-    public void onOpen(Session session) {//, EndpointConfig ec) {
-//        final RemoteEndpoint.Basic remote = session.getBasicRemote();
-//        session.addMessageHandler(new MessageHandler.Whole<String>() {
-//            @Override
-//            public void onMessage(String message) {
-//                try {
-//                    remote.sendText("Got your message (" + message + ")");
-//                } catch (IOException e) {
-//                    {
-//                        LOGGER.log(Level.WARNING, "Error sending text message", e);
-//                    }
-//                }
-//            }
-//        });
+    public void onOpen(Session session) {
     }
 
     @OnMessage
