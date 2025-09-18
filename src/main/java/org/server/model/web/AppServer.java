@@ -5,7 +5,7 @@ import org.eclipse.jetty.ee11.websocket.jakarta.server.config.JakartaWebSocketSe
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.server.config.AppConfig;
+import org.server.config.ApplicationContext;
 import org.server.config.shared.Websocket;
 
 import java.util.List;
@@ -46,12 +46,13 @@ public class AppServer {
             for (Handler.Abstract handler : handler) {
                 server.setHandler(handler);
                 if (handler instanceof ServletContextHandler) {
-                    JakartaWebSocketServletContainerInitializer.configure((ServletContextHandler) handler, (servletContext, wsContainer) -> {
-                        var websockets = AppConfig.getTypeClassBean(Websocket.class); // obtenemos todos los Websocket.class
-                        for (var websocket : websockets) {
-                            wsContainer.addEndpoint(websocket);
-                        }
-                    });
+                    JakartaWebSocketServletContainerInitializer.configure((ServletContextHandler) handler,
+                            (servletContext, wsContainer) -> {
+                                var websockets = ApplicationContext.getInstance().getBeansByAnnotation(Websocket.class); // obtenemos todos los Websocket.class
+                                for (var websocket : websockets) {
+                                    wsContainer.addEndpoint(websocket);
+                                }
+                            });
                 }
             }
         } catch (Exception e) {

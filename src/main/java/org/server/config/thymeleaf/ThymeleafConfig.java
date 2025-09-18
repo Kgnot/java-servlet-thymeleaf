@@ -1,4 +1,4 @@
-package org.server.config;
+package org.server.config.thymeleaf;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

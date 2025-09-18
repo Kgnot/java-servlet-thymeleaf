@@ -4,7 +4,7 @@ import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.server.config.ThymeleafConfig;
+import org.server.config.thymeleaf.ThymeleafConfig;
 import org.server.config.shared.Controller;
 import org.server.config.shared.Inject;
 import org.server.model.service.UserService;

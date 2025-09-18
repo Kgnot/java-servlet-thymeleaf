@@ -6,7 +6,7 @@ import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.eclipse.jetty.server.Handler;
 import org.reflections.Reflections;
-import org.server.config.AppConfig;
+import org.server.config.ApplicationContext;
 import org.server.config.shared.ServletAutoMapping;
 
 import java.util.Objects;
@@ -33,7 +33,8 @@ public class HandlerServerFactory {
             try {
                 ServletAutoMapping mapping = servletClass.getAnnotation(ServletAutoMapping.class);
                 String path = mapping.value();
-                HttpServlet servlet = AppConfig.getBean(servletClass.asSubclass(HttpServlet.class));
+                HttpServlet servlet = ApplicationContext.getInstance()
+                        .getBean(servletClass.asSubclass(HttpServlet.class));
                 if (servlet != null) {
                     handler.addServlet(new ServletHolder(servlet), path);
                 } else {

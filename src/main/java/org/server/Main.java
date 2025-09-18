@@ -1,6 +1,6 @@
 package org.server;
 
-import org.server.config.AppConfig;
+import org.server.config.ApplicationContext;
 import org.server.model.web.AppServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         // Properties:
         readProperties();
-        AppConfig.start(); // iniciamos la lectura
+        ApplicationContext.getInstance().initialize(); // inicializamos
         // iniciamos el server:
         AppServerService appServer = new AppServerService();
         try {
