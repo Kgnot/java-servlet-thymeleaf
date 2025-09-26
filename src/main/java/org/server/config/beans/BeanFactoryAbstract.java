@@ -1,4 +1,4 @@
-package org.server.config;
+package org.server.config.beans;
 
 import java.lang.annotation.Annotation;
 
@@ -15,4 +15,7 @@ public abstract class BeanFactoryAbstract {
     }
 
     public abstract void createBeansForAnnotation(Class<? extends Annotation> clazz);
+
+    public abstract void scanBeanForAnnotation(Class<? extends Annotation> clazz);
+
 }

@@ -2,11 +2,9 @@ package org.server.model.service;
 
 import org.server.config.shared.Inject;
 import org.server.config.shared.Service;
-import org.server.model.bd.DataBasesConnection;
-import org.server.model.dto.UserDao;
-import org.server.model.entities.User;
+import org.server.model.entities.UserEntity;
+import org.server.model.dao.UserDao;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -20,17 +18,14 @@ public class UserService {
     private final ExecutorService virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
     @Inject
-    public UserService(DataBasesConnection bdc){
-        this.userDao = new UserDao(bdc);
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
-    public CompletableFuture<List<User>> getUsers() {
-        CompletableFuture<List<User>> future = new CompletableFuture<>();
-        virtualThreadExecutor.submit(() -> {
-            List<User> userList = userDao.getUsers();
-            future.complete(userList);
-        });
-
-        return future;
+    public CompletableFuture<List<UserEntity>> getUsers() {
+        return CompletableFuture.supplyAsync(
+                userDao::getUsers,
+                virtualThreadExecutor
+        );
     }
 }

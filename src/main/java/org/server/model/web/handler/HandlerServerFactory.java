@@ -6,7 +6,7 @@ import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.eclipse.jetty.server.Handler;
 import org.reflections.Reflections;
-import org.server.config.ApplicationContext;
+import org.server.config.beans.ApplicationContext;
 import org.server.config.shared.ServletAutoMapping;
 
 import java.util.Objects;

@@ -1,9 +1,10 @@
-package org.server.config;
+package org.server.config.beans;
 
 import org.server.config.shared.Inject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,16 +16,29 @@ public class SimpleBeanContainer implements BeanContainer {
     private final static Logger LOGGER = Logger.getLogger(SimpleBeanContainer.class.getName());
 
     private final Map<Class<?>, Object> beans = new ConcurrentHashMap<>(); // porque concurrent?
-
+    private final List<Class<?>> beansClass = new ArrayList<>();
 
     @Override
     public <T> T getBean(Class<T> beanClass) {
-        return (T) beanClass.cast(beans.get(beanClass));
+        return beanClass.cast(beans.get(beanClass));
     }
 
     @Override
     public <T> void registerBean(Class<T> beanClass, T instanceBean) {
         beans.put(beanClass, instanceBean);
+    }
+
+    @Override
+    public <T> void registerBeanClass(Class<T> beanClass) {
+        beansClass.add(beanClass);
+    }
+
+    @Override
+    public <T> boolean isBeanClassRegistered(Class<T> beanClassSearched) {
+        return beansClass.stream()
+                .filter(clazz -> clazz.equals(beanClassSearched))
+                .toList()
+                .size() == 1;
     }
 
     @Override
@@ -52,11 +66,11 @@ public class SimpleBeanContainer implements BeanContainer {
             try {
                 field.set(bean, dependency);
             } catch (IllegalAccessException e) {
-//                throw new RuntimeException("Bean no encontrado: ", e);
                 LOGGER.log(Level.WARNING, "No se pudo inyectar la dependencia " + dependency, e);
+                throw new RuntimeException("Bean no encontrado: ", e);
             }
         } else {
-            LOGGER.warning("No se encontró bean");
+            LOGGER.warning("No se encontró bean" + bean);
         }
     }
 }

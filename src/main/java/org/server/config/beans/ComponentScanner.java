@@ -1,4 +1,4 @@
-package org.server.config;
+package org.server.config.beans;
 
 import org.reflections.Reflections;
 
