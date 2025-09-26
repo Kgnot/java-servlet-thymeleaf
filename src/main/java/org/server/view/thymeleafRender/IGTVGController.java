@@ -1,4 +1,4 @@
-package org.server.view.render;
+package org.server.view.thymeleafRender;
 
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.web.IWebExchange;
