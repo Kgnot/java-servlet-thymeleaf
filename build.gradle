@@ -17,9 +17,11 @@ repositories {
  
 
 dependencies {
-    // Hibernate + JPA
+    // Hibernate + JPA + Hikari
     implementation 'org.hibernate.orm:hibernate-core:6.6.1.Final'
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation "org.hibernate.orm:hibernate-hikaricp:6.6.1.Final"
     // PostgreSQL driver
     implementation 'org.postgresql:postgresql:42.7.3'
     // Reflection
@@ -34,7 +36,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.42'  // ← Cambiar de implementation a compileOnly
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
     //Gson:
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
 }
 
