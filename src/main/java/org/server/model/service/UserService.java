@@ -28,4 +28,11 @@ public class UserService {
                 virtualThreadExecutor
         );
     }
+
+    public CompletableFuture<UserEntity> getUser(int id) {
+        return CompletableFuture.supplyAsync(
+                () -> userDao.getUserById(id),
+                virtualThreadExecutor
+        );
+    }
 }

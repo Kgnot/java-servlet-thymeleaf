@@ -22,4 +22,13 @@ public class UserDao {
         }
     }
 
+
+    public UserEntity getUserById(int id){
+        try(EntityManager em = hibernate.getEntityManager()){
+            return em.createQuery("select u from UserEntity u where u.id = :id", UserEntity.class)
+                    .setParameter("id",id)
+                    .getSingleResult();
+        }
+    }
+
 }

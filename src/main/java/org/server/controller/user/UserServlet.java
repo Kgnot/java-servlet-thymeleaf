@@ -1,20 +1,21 @@
-package org.server.controller;
+package org.server.controller.user;
 
-import com.google.gson.Gson;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.server.config.shared.Controller;
 import org.server.config.shared.Inject;
+import org.server.http.ResponseCommon;
 import org.server.model.service.UserService;
 import org.server.config.shared.ServletAutoMapping;
+
 import java.io.IOException;
 
 
 @Controller
-@ServletAutoMapping("/api/home")
-public class HelloServlet extends HttpServlet {
+@ServletAutoMapping("/api/users")
+public class UserServlet extends HttpServlet {
 
 
     @Inject
@@ -22,12 +23,12 @@ public class HelloServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("application/json");
         AsyncContext asyncContext = req.startAsync();
         userService.getUsers()
                 .whenComplete((userList, throwable) -> {
-                    String json = new Gson().toJson(userList);
+                    var json = ResponseCommon.ok(userList).toJson();
                     try {
                         asyncContext.getResponse().getWriter().write(json);
                     } catch (IOException e) {
@@ -37,6 +38,7 @@ public class HelloServlet extends HttpServlet {
                     }
                 });
     }
+
 
 }
 
