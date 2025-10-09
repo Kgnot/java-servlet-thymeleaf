@@ -6,14 +6,14 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.server.config.shared.Component;
-import org.server.controller.signin.ModeloLogin;
+import org.server.controller.signIn.ModeloSignIn;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 //Especificamos la ruta :p
 @Component
-@WebFilter("/api/login")
+@WebFilter("/api/sign-in")
 public class AgeValidationFilter implements Filter {
 
     // y lo que debe hacer el filtro
@@ -28,7 +28,7 @@ public class AgeValidationFilter implements Filter {
         if ("POST".equalsIgnoreCase(req.getMethod()) && req.getContentType().contains("application/json")) {
             BufferedReader reader = req.getReader();
             Gson gson = new Gson();
-            ModeloLogin user = gson.fromJson(reader, ModeloLogin.class);
+            ModeloSignIn user = gson.fromJson(reader, ModeloSignIn.class);
 
             if (user.age() < 18) {
                 res.setContentType("application/json");
