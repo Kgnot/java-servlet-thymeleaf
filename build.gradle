@@ -8,8 +8,13 @@ java {
     }
 }
 
+jar {
+    archiveBaseName.set("app-jetty")
+    archiveVersion.set("") // genera "app-jetty.jar"
+}
+
 group = 'org.server'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
