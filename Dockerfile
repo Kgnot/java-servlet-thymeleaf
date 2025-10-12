@@ -18,7 +18,7 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
 # Copiamos el JAR compilado desde la etapa anterior
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.jar app-jetty.jar
 
 # Puerto en el que Jetty escuchará
 EXPOSE 8080
