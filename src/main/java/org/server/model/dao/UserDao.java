@@ -22,6 +22,7 @@ public class UserDao {
             return em.createQuery("SELECT u FROM UserEntity u", UserEntity.class)
                     .getResultList();
         }
+
     }
 
     public UserEntity getUserById(int id) {

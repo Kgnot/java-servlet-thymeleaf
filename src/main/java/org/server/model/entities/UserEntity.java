@@ -55,20 +55,20 @@ public class UserEntity {
      * Hash de la contraseña almacenado de manera segura.
      */
     @Column(name = "password_hash")
-    private String password_hash;
+    private String passwordHash;
 
     /**
      * Identificador del rol asignado al usuario.
      * Normalmente hace referencia a otra tabla (roles).
      */
     @Column(name = "role_id")
-    private int role_id;
+    private int roleId;
 
     /**
      * Fecha y hora de creación del registro de usuario.
      */
     @Column(name = "created_at")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     /**
      * Estado del usuario.
@@ -76,5 +76,5 @@ public class UserEntity {
      * {@code false} si la cuenta está deshabilitada o inactiva.
      */
     @Column(name = "is_active")
-    private boolean is_active;
+    private boolean isActive;
 }
