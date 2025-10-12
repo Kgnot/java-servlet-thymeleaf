@@ -7,8 +7,15 @@ import org.server.config.shared.Configuration;
 @Configuration("WriteDatabase")
 public class WriteDatabaseConnectionFactory extends ConnectFactory {
 
+    private final Connect instance;
+
+    public WriteDatabaseConnectionFactory() {
+        // Inicializa la conexión al crear el bean
+        this.instance = new ConnectWriteDatabase();
+    }
+
     @Override
     public Connect getConnectInstance() {
-        return new ConnectWriteDatabase();
+        return instance;
     }
 }

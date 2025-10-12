@@ -7,15 +7,22 @@ import org.slf4j.LoggerFactory;
 
 
 public class Main {
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) {
-        ApplicationContext.getInstance().initialize(); // inicializamos los beans
+    public static void main(String[] args) throws InterruptedException {
+        ApplicationContext.getInstance().initialize();
         AppServerService appServer = new AppServerService();
-        try {
-            appServer.start();
-        } catch (Exception e) {
-            log.error("Error al iniciar la app", e);
-        }
+
+        Thread serverThread = new Thread(() -> {
+            try {
+                appServer.start();
+            } catch (Exception e) {
+                logger.error("Error starting server", e);
+            }
+        });
+
+        serverThread.start();
+        serverThread.join();
     }
+
 }

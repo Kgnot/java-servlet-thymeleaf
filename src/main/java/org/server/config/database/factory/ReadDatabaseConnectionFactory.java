@@ -7,8 +7,14 @@ import org.server.config.shared.Configuration;
 @Configuration("ReadDatabase")
 public class ReadDatabaseConnectionFactory extends ConnectFactory {
 
+    private final Connect instance;
+
+    public ReadDatabaseConnectionFactory() {
+        this.instance = new ConnectReadDatabase();
+    }
+
     @Override
     public Connect getConnectInstance() {
-        return new ConnectReadDatabase();
+        return instance;
     }
 }
