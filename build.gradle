@@ -11,6 +11,11 @@ java {
 jar {
     archiveBaseName.set("app-jetty")
     archiveVersion.set("") // genera "app-jetty.jar"
+    manifest {
+        attributes(
+                'Main-Class': 'org.server.Main'
+        )
+    }
 }
 
 application{
