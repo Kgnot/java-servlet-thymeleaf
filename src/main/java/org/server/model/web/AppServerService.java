@@ -74,6 +74,7 @@ public class AppServerService {
      */
     public void start() throws Exception {
         this.appServer.getServer().start();
+        this.appServer.getServer().join(); // esto lo mantiene vivo
     }
 
     /**

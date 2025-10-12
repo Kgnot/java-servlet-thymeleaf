@@ -23,8 +23,6 @@ shadowJar {
     mergeServiceFiles()  // Importante para evitar conflictos
 }
 
-// Hacer que build dependa de shadowJar
-build.dependsOn shadowJar
 
 application {
     mainClass = 'org.server.Main'
