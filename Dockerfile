@@ -1,9 +1,12 @@
 # Etapa 1: Construcción del proyecto con Gradle
 FROM gradle:8.9-jdk21 AS build
 
-# Copia todo el código fuente y el wrapper de Gradle
+# Copia el codigo del gradle
 WORKDIR /app
 COPY . .
+
+#necesito dar los permisos
+RUN chmod +x gradlew
 
 # Compila el proyecto (sin tests)
 RUN ./gradlew clean build -x test
