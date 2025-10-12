@@ -1,27 +1,34 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'  // ← Plugin para Fat JAR
 }
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-jar {
-    archiveBaseName.set("app-jetty")
-    archiveVersion.set("") // genera "app-jetty.jar"
+// Configuración del Shadow JAR (Fat JAR)
+shadowJar {
+    archiveBaseName.set('app-jetty')
+    archiveClassifier.set('')
+    archiveVersion.set('')
     manifest {
         attributes(
                 'Main-Class': 'org.server.Main'
         )
     }
+    mergeServiceFiles()  // Importante para evitar conflictos
 }
 
-application{
+// Hacer que build dependa de shadowJar
+build.dependsOn shadowJar
+
+application {
     mainClass = 'org.server.Main'
 }
-
 
 group = 'org.server'
 version = '1.0.0'
@@ -29,7 +36,6 @@ version = '1.0.0'
 repositories {
     mavenCentral()
 }
- 
 
 dependencies {
     // Hibernate + JPA + Hikari
@@ -46,16 +52,16 @@ dependencies {
     implementation 'jakarta.websocket:jakarta.websocket-api:2.2.0'
     implementation 'org.eclipse.jetty.ee11.websocket:jetty-ee11-websocket-jakarta-server:12.1.1'
     // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.42'  // ← Cambiar de implementation a compileOnly
+    compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
-    //Gson:
+    // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
-    // JWT:
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-    // LOGGER:
-    runtimeOnly 'org.slf4j:slf4j-simple:2.0.16'
+    // LOGGER - cambiar a implementation para que se incluya en el JAR
+    implementation 'org.slf4j:slf4j-simple:2.0.16'  // ← Cambio importante
 }
 
 test {

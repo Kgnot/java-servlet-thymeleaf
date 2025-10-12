@@ -5,11 +5,11 @@ FROM gradle:8.9-jdk21 AS build
 WORKDIR /app
 COPY . .
 
-#necesito dar los permisos
+# Necesito dar los permisos
 RUN chmod +x gradlew
 
-# Compila el proyecto (sin tests)
-RUN ./gradlew clean build -x test
+# Compila el proyecto con shadowJar (Fat JAR con dependencias)
+RUN ./gradlew clean shadowJar -x test
 
 # Etapa 2: Imagen ligera de ejecución
 FROM eclipse-temurin:21-jdk-jammy
@@ -18,7 +18,7 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
 # Copiamos el JAR compilado desde la etapa anterior
-COPY --from=build /app/build/libs/*.jar app-jetty.jar
+COPY --from=build /app/build/libs/app-jetty.jar app-jetty.jar
 
 # Puerto en el que Jetty escuchará
 EXPOSE 8080
