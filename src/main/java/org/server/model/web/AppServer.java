@@ -51,17 +51,17 @@ public class AppServer {
                     //registramos los websockets
                     JakartaWebSocketServletContainerInitializer.configure(servletContextHandler,
                             (servletContext, wsContainer) -> {
-                                var websockets = ApplicationContext.getInstance().getBeansByAnnotation(Websocket.class); // obtenemos todos los Websocket.class
-                                for (var websocket : websockets) {
-                                    wsContainer.addEndpoint(websocket);
+                                var websocketsBeanList = ApplicationContext.getInstance().getBeansByAnnotation(Websocket.class); // obtenemos todos los Websocket.class
+                                for (var websocketBean : websocketsBeanList) {
+                                    wsContainer.addEndpoint(websocketBean.getClazz());
                                 }
                             });
                     // Debemos registrar los filtros:
                     var filters = ApplicationContext.getInstance().getBeansByAnnotation(WebFilter.class);
                     for (var filterClass : filters) {
-                        Filter filterInstance = (Filter) ApplicationContext.getInstance().getBean(filterClass);
+                        Filter filterInstance = (Filter) ApplicationContext.getInstance().getBeanByType(filterClass.getClazz());
 
-                        WebFilter filterAnn = filterClass.getAnnotation(WebFilter.class);
+                        WebFilter filterAnn = filterClass.getClazz().getAnnotation(WebFilter.class);
                         String[] urlPatterns = filterAnn.value().length > 0 ? filterAnn.value() : filterAnn.urlPatterns();
 
                         for (var url : urlPatterns) {

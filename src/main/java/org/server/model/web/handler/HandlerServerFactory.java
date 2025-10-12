@@ -20,7 +20,9 @@ import java.util.logging.Logger;
  */
 public class HandlerServerFactory {
 
-    /** Logger para mensajes de información y errores. */
+    /**
+     * Logger para mensajes de información y errores.
+     */
     private final static Logger logger;
 
     static {
@@ -45,7 +47,7 @@ public class HandlerServerFactory {
                 ServletAutoMapping mapping = servletClass.getAnnotation(ServletAutoMapping.class);
                 String path = mapping.value();
                 HttpServlet servlet = ApplicationContext.getInstance()
-                        .getBean(servletClass.asSubclass(HttpServlet.class));
+                        .getBeanByType(servletClass.asSubclass(HttpServlet.class));
                 if (servlet != null) {
                     handler.addServlet(new ServletHolder(servlet), path);
                 } else {

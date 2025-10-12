@@ -1,11 +1,14 @@
 package org.server.config.beans;
 
+import org.server.config.beans.Bean.BeanType;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  * Implementación concreta de {@link BeanFactoryAbstract} que gestiona la
  * creación e inyección de beans en el contenedor a partir de anotaciones específicas.
@@ -17,46 +20,32 @@ import java.util.logging.Logger;
 public class BeanFactoryImpl extends BeanFactoryAbstract {
     private static final Logger logger = Logger.getLogger(BeanFactoryImpl.class.getName());
 
-    /**
-     * Constructor de la fábrica de beans.
-     *
-     * @param componentScanner el escáner encargado de localizar clases anotadas
-     * @param beanContainer    el contenedor donde se registrarán los beans creados
-     */
+
     public BeanFactoryImpl(ComponentScanner componentScanner, BeanContainer beanContainer) {
         super(componentScanner, beanContainer);
     }
 
-    /**
-     * Crea instancias de todas las clases anotadas con {@code annotationClass},
-     * resolviendo sus dependencias a través de los constructores disponibles,
-     * y las registra en el {@link BeanContainer}.
-     *
-     * @param annotationClass la anotación objetivo usada para identificar los beans
-     */
     @Override
     public void createBeansForAnnotation(Class<? extends Annotation> annotationClass) {
         Set<Class<?>> classes = componentScanner.findClassWithAnnotation(annotationClass);
 
         for (Class<?> clazz : classes) {
             try {
-                Object instance = createInstance(clazz);
-                safeRegister(clazz, instance);
+                // Obtener el nombre del bean desde la anotación (si tiene valor)
+                Annotation annotation = clazz.getAnnotation(annotationClass);
+                String beanName = extractAnnotationValue(annotation, clazz.getSimpleName());
+
+                Object instance = createInstance(clazz, beanName);
+
+                // Registrar en el contenedor con BeanType
+                safeRegister(clazz, instance, beanName);
+
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Exception en createBeansForAnnotation: " + e.getMessage());
+                logger.log(Level.SEVERE, "Exception en createBeansForAnnotation: " + e.getMessage(), e);
             }
         }
     }
 
-    /**
-     * Escanea las clases anotadas con {@code annotationClass} y las
-     * registra en el {@link BeanContainer} sin instanciarlas.
-     *
-     * <p>Este método sirve para preparar las clases que podrán ser
-     * instanciadas más adelante.</p>
-     *
-     * @param annotationClass la anotación usada para identificar las clases candidatas
-     */
     @Override
     public void scanBeanForAnnotation(Class<? extends Annotation> annotationClass) {
         Set<Class<?>> classes = componentScanner.findClassWithAnnotation(annotationClass);
@@ -66,37 +55,36 @@ public class BeanFactoryImpl extends BeanFactoryAbstract {
         }
     }
 
-    /**
-     * Crea una nueva instancia de la clase dada utilizando el primer constructor disponible.
-     * Si el constructor requiere parámetros, los obtiene del {@link BeanContainer}.
-     *
-     * @param clazz la clase del bean a instanciar
-     * @return la instancia creada
-     * @throws Exception si no hay constructores disponibles o falla la creación
-     */
-    private Object createInstance(Class<?> clazz) throws Exception {
+
+    private Object createInstance(Class<?> clazz, String beanName) throws Exception {
         Constructor<?>[] constructors = clazz.getConstructors();
         if (constructors.length == 0) {
             throw new RuntimeException("No hay constructores creados disponibles");
         }
 
         Constructor<?> constructor = constructors[0];
+
+
         Object[] params = Arrays.stream(constructor.getParameterTypes())
-                .map(beanContainer::getBean)
+                .map(paramType -> beanContainer.getBean(paramType, beanName))
                 .toArray();
 
         return constructor.newInstance(params);
     }
 
-    /**
-     * Registra de manera segura un bean en el {@link BeanContainer},
-     * realizando un cast al tipo correcto.
-     *
-     * @param clazz    la clase del bean
-     * @param instance la instancia del bean
-     * @param <T>      el tipo del bean
-     */
-    private <T> void safeRegister(Class<T> clazz, Object instance) {
-        beanContainer.registerBean(clazz, clazz.cast(instance));
+
+    private <T> void safeRegister(Class<T> clazz, Object instance, String beanName) {
+        beanContainer.registerBean(new BeanType<>(clazz, beanName), clazz.cast(instance));
+    }
+
+    private String extractAnnotationValue(Annotation annotation, String defaultName) {
+        try {
+            Object value = annotation.annotationType().getMethod("value").invoke(annotation);
+            if (value != null && !value.toString().isBlank()) {
+                return value.toString();
+            }
+        } catch (Exception ignored) {
+        }
+        return defaultName;
     }
 }

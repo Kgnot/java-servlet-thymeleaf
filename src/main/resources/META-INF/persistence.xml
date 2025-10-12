@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
-    <persistence-unit name="CRM" transaction-type="RESOURCE_LOCAL">
+
+    <!-- Unidad para escritura -->
+    <persistence-unit name="CRM_WRITE" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.server.model.entities.UserEntity</class>
 
         <properties>
             <!-- JDBC -->
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/fec"/>
-            <property name="jakarta.persistence.jdbc.user" value="kgnot"/>
-            <property name="jakarta.persistence.jdbc.password" value="1234"/>
+            <!-- Esto se hace en tiempo de ejecución-->
 
-            <!-- Hibernate config -->
+            <!-- Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/> <!-- validate, update, create, create-drop -->
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
 
             <!-- HikariCP -->
             <property name="hibernate.hikari.minimumIdle" value="5"/>
             <property name="hibernate.hikari.maximumPoolSize" value="15"/>
-            <property name="hibernate.hikari.idleTimeout" value="30000"/>
-            <property name="hibernate.hikari.poolName" value="CRM-Pool"/>
-
+            <property name="hibernate.hikari.poolName" value="CRM-Write-Pool"/>
         </properties>
     </persistence-unit>
+
+    <!-- Unidad para lectura -->
+    <persistence-unit name="CRM_READ" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>org.server.model.entities.UserEntity</class>
+
+        <properties>
+            <!-- JDBC -->
+            <!-- Esto se hace en tiempo de ejecución-->
+
+            <!-- Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+
+            <!-- HikariCP -->
+            <property name="hibernate.hikari.minimumIdle" value="3"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="10"/>
+            <property name="hibernate.hikari.poolName" value="CRM-Read-Pool"/>
+        </properties>
+    </persistence-unit>
+
 </persistence>

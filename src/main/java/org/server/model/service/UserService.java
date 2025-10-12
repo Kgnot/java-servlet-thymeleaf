@@ -13,14 +13,11 @@ import java.util.concurrent.Executors;
 @Service
 public class UserService {
 
-    private final UserDao userDao;
+    @Inject
+    private UserDao userDao;
 
     private final ExecutorService virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
-    @Inject
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     public CompletableFuture<List<UserEntity>> getUsers() {
         return CompletableFuture.supplyAsync(

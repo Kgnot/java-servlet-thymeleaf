@@ -1,5 +1,6 @@
 package org.server.config.beans;
 
+import org.server.config.beans.Bean.BeanType;
 import org.server.config.shared.*;
 
 import java.lang.annotation.Annotation;
@@ -21,13 +22,19 @@ import java.util.logging.Logger;
 public class ApplicationContext {
     private static final Logger LOGGER = Logger.getLogger(ApplicationContext.class.getName());
 
-    /** Contenedor de beans que administra instancias y sus dependencias. */
+    /**
+     * Contenedor de beans que administra instancias y sus dependencias.
+     */
     private final BeanContainer container;
 
-    /** Fábrica de beans que se encarga de escanear y crear instancias según anotaciones. */
+    /**
+     * Fábrica de beans que se encarga de escanear y crear instancias según anotaciones.
+     */
     private final BeanFactoryAbstract beanFactory;
 
-    /** Instancia única de ApplicationContext (Singleton). */
+    /**
+     * Instancia única de ApplicationContext (Singleton).
+     */
     private static ApplicationContext instance;
 
     /**
@@ -72,6 +79,8 @@ public class ApplicationContext {
 
         LOGGER.info("ApplicationContext inicializado correctamente");
 
+        LOGGER.info(container.getBeansByAnnotation(Component.class) + "");
+
         // Inyectar dependencias en todos los beans detectados
         container.getBeansByAnnotation(Configuration.class).forEach(this::injectDependencies);
         container.getBeansByAnnotation(Component.class).forEach(this::injectDependencies);
@@ -83,27 +92,20 @@ public class ApplicationContext {
         LOGGER.info("Dependencias inyectadas en todos los beans");
     }
 
-    /**
-     * Inyecta dependencias en un bean específico según sus campos anotados con {@code @Inject}.
-     *
-     * @param beanClass clase del bean sobre el cual se realizará la inyección
-     */
-    private void injectDependencies(Class<?> beanClass) {
-        Object bean = container.getBean(beanClass);
+
+    private void injectDependencies(BeanType<?> beanType) {
+        Object bean = container.getBean(beanType.getClazz(), beanType.getSpecificBean()); // Obtenemos la instancia
         if (bean != null) {
             container.injectBean(bean);
         }
     }
 
-    /**
-     * Obtiene un bean administrado por el contexto, identificado por su clase.
-     *
-     * @param clazz clase del bean requerido
-     * @param <T> tipo del bean
-     * @return instancia del bean o {@code null} si no existe
-     */
-    public <T> T getBean(Class<T> clazz) {
-        return container.getBean(clazz);
+    public <T> T getBean(Class<T> clazz, String beanName) {
+        return container.getBean(clazz, beanName);
+    }
+
+    public <T> T getBeanByType(Class<T> clazz) {
+        return container.getBeanByType(clazz);
     }
 
     /**
@@ -112,7 +114,7 @@ public class ApplicationContext {
      * @param annotation anotación a buscar
      * @return lista de clases que poseen la anotación indicada
      */
-    public List<Class<?>> getBeansByAnnotation(Class<? extends Annotation> annotation) {
+    public List<BeanType<?>> getBeansByAnnotation(Class<? extends Annotation> annotation) {
         return container.getBeansByAnnotation(annotation);
     }
 }
