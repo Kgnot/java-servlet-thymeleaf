@@ -1,4 +1,4 @@
-package org.server.model.repository;
+package org.server.model.repository.user;
 
 import jakarta.persistence.EntityManager;
 import org.server.config.database.factory.ConnectFactory;
@@ -10,8 +10,8 @@ import org.server.model.entities.UserEntity;
 
 import java.util.List;
 
-@Component
-public class UserRepository {
+@Component("NeonSQL")
+public class UserQueryRepositoryImpl implements UserQueryRepository {
 
     @Inject("ReadDatabase")
     private ConnectFactory connect;
@@ -29,6 +29,7 @@ public class UserRepository {
                     root.get("roleId"),
                     root.get("isActive")
             ));
+
 
             var typedQuery = em.createQuery(cq);
 

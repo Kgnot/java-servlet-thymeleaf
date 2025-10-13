@@ -4,7 +4,6 @@ import org.server.config.database.DatabaseTypes;
 import org.server.config.properties.AppProperties;
 import org.server.config.shared.Configuration;
 
-@Configuration
 public class ConnectWriteDatabase extends Connect {
 
 

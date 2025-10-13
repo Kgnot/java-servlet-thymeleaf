@@ -79,7 +79,7 @@ public class ApplicationContext {
 
         LOGGER.info("ApplicationContext inicializado correctamente");
 
-        LOGGER.info(container.getBeansByAnnotation(Component.class) + "");
+        LOGGER.info(container.getBeansByAnnotation(Configuration.class) + "");
 
         // Inyectar dependencias en todos los beans detectados
         container.getBeansByAnnotation(Configuration.class).forEach(this::injectDependencies);

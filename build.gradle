@@ -59,7 +59,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     // LOGGER - cambiar a implementation para que se incluya en el JAR
-    implementation 'org.slf4j:slf4j-simple:2.0.16'  // ← Cambio importante
+    implementation 'ch.qos.logback:logback-classic:1.5.13'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
 }
 
 test {

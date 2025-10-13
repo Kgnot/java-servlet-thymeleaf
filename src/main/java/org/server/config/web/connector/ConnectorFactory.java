@@ -1,4 +1,4 @@
-package org.server.model.web.connector;
+package org.server.config.web.connector;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;

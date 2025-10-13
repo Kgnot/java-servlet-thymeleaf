@@ -1,7 +1,7 @@
 package org.server;
 
 import org.server.config.beans.ApplicationContext;
-import org.server.model.web.AppServerService;
+import org.server.config.web.AppServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

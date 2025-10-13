@@ -1,6 +1,7 @@
 package org.server.config.beans;
 
 import org.server.config.beans.Bean.BeanType;
+import org.server.config.shared.Configuration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -28,7 +29,9 @@ public class BeanFactoryImpl extends BeanFactoryAbstract {
     @Override
     public void createBeansForAnnotation(Class<? extends Annotation> annotationClass) {
         Set<Class<?>> classes = componentScanner.findClassWithAnnotation(annotationClass);
-
+        if (annotationClass.isAssignableFrom(Configuration.class)) {
+            logger.log(Level.ALL, "Se econtró Configuration: {}", annotationClass);
+        }
         for (Class<?> clazz : classes) {
             try {
                 // Obtener el nombre del bean desde la anotación (si tiene valor)
@@ -36,7 +39,6 @@ public class BeanFactoryImpl extends BeanFactoryAbstract {
                 String beanName = extractAnnotationValue(annotation, clazz.getSimpleName());
 
                 Object instance = createInstance(clazz, beanName);
-
                 // Registrar en el contenedor con BeanType
                 safeRegister(clazz, instance, beanName);
 
@@ -74,6 +76,11 @@ public class BeanFactoryImpl extends BeanFactoryAbstract {
 
 
     private <T> void safeRegister(Class<T> clazz, Object instance, String beanName) {
+        var bean = beanContainer.getBean(clazz, beanName);
+
+        if (bean != null)
+            return;
+
         beanContainer.registerBean(new BeanType<>(clazz, beanName), clazz.cast(instance));
     }
 

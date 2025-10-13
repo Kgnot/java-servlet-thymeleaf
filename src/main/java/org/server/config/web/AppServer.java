@@ -1,4 +1,4 @@
-package org.server.model.web;
+package org.server.config.web;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;

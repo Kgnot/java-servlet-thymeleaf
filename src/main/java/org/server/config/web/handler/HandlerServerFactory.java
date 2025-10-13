@@ -1,4 +1,4 @@
-package org.server.model.web.handler;
+package org.server.config.web.handler;
 
 import jakarta.servlet.http.HttpServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
