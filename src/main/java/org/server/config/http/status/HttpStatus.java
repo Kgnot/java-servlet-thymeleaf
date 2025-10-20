@@ -1,4 +1,4 @@
-package org.server.http.status;
+package org.server.config.http.status;
 
 public enum HttpStatus {
     // 2xx Success

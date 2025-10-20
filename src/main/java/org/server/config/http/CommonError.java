@@ -1,7 +1,7 @@
-package org.server.http;
+package org.server.config.http;
 
 import com.google.gson.Gson;
-import org.server.http.status.HttpStatus;
+import org.server.config.http.status.HttpStatus;
 
 import java.util.Map;
 

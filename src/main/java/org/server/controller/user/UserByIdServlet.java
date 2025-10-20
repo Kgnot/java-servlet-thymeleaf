@@ -4,12 +4,12 @@ import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.server.http.ResponseCommon;
-import org.server.http.status.HttpStatus;
+import org.server.config.http.ResponseCommon;
+import org.server.config.http.status.HttpStatus;
 import org.server.config.shared.Controller;
 import org.server.config.shared.Inject;
 import org.server.config.shared.ServletAutoMapping;
-import org.server.http.CommonError;
+import org.server.config.http.CommonError;
 import org.server.model.service.UserService;
 
 import java.io.IOException;

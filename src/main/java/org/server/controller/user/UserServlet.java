@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.server.config.shared.Controller;
 import org.server.config.shared.Inject;
-import org.server.http.ResponseCommon;
+import org.server.config.http.ResponseCommon;
 import org.server.model.CQRS.quey.impl.user.GetUserListHandler;
 import org.server.model.CQRS.quey.impl.user.GetUserListQuery;
 import org.server.config.shared.ServletAutoMapping;
