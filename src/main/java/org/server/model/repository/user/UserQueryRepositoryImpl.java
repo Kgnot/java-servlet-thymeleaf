@@ -30,12 +30,9 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                     root.get("isActive")
             ));
 
-
             var typedQuery = em.createQuery(cq);
 
             return typedQuery.getResultList();
         }
     }
-
-
 }
