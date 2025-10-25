@@ -1,5 +1,6 @@
 package org.server.model.repository.user;
 
+import org.server.config.shared.Component;
 import org.server.model.CQRS.quey.impl.user.GetUserListQuery;
 import org.server.model.dto.UserDto;
 
